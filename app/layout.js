@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AppContextProvider } from "@/context/AppContext";
 
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
