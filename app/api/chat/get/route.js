@@ -9,17 +9,17 @@ export async function GET(req) {
         if (!userId) {
             return NextResponse.json({
                 success: false,
-                message: "User not authenticaled"
+                message: "User not authenticated"
             })
         }
 
-        // Connect to the database anf fetch all chats for the user 
+        // Connect to the database and fetch all chats for the user 
         await connectDB();
         const data = await Chat.find({ userId });
 
         return NextResponse.json({ success: true, data })
 
     } catch (error) {
-        return NextResponse.json({ success: false, error: ErrorEvent.message });
+        return NextResponse.json({ success: false, error: error.message });
     }
 }
