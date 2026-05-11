@@ -31,11 +31,15 @@ const PromptBox = ({ setIsLoading, isLoading }) => {
                 timestamp: Date.now(),
             }
 
+            setPrompt('');
+            setIsLoading(true);
+
+
             // saving user prompt in chats array 
 
             setChats((prevChats) => prevChats.map((chat) => chat._id === selectedChat._id ? {
                 ...chat,
-                messages: [...chat.messages, userPrompt]
+                messages: [...(chat.messages ?? []), userPrompt]
             } : chat
             ))
 
@@ -43,16 +47,16 @@ const PromptBox = ({ setIsLoading, isLoading }) => {
 
             setSelectedChat((prev) => ({
                 ...prev,
-                messages: [...prev.messages, userPrompt]
+                messages: [...(prev?.messages ?? []), userPrompt]
             }))
 
             const { data } = await axios.post('/api/chat/ai', {
                 chatId: selectedChat._id,
-                prompt
+                prompt: promptCopy
             })
 
             if (data.success) {
-                setChats((prevChats) => prevChats.map((chat) => chat._id === selectedChat._id ? { ...chat, messages: [...chat.messages, data.data] } : chat))
+                setChats((prevChats) => prevChats.map((chat) => chat._id === selectedChat._id ? { ...chat, messages: [...(chat.messages ?? []), data.data] } : chat))
 
                 const message = data.data.content;
                 const messageTokens = message.split(" ");
@@ -64,7 +68,7 @@ const PromptBox = ({ setIsLoading, isLoading }) => {
 
                 setSelectedChat((prev) => ({
                     ...prev,
-                    messages: [...prev.messages, assistantMessage],
+                    messages: [...(prev?.messages ?? []), assistantMessage],
                 }))
 
                 for (let i = 0; i < messageTokens.length; i++) {
@@ -72,7 +76,7 @@ const PromptBox = ({ setIsLoading, isLoading }) => {
                         assistantMessage.content = messageTokens.slice(0, i + 1).join(" ");
                         setSelectedChat((prev) => {
                             const updatedMessages = [
-                                ...prev.messages.slice(0, -1),
+                                ...(prev?.messages ?? []).slice(0, -1),
                                 assistantMessage
                             ]
                             return { ...prev, messages: updatedMessages }
@@ -94,7 +98,7 @@ const PromptBox = ({ setIsLoading, isLoading }) => {
 
     return (
         <form onSubmit={sendPrompt}
-            className={`w-full ${selectedChat?.messages.length > 0 ? "max-w-3xl" : "max-w-2xl"} bg-[#404045] p-4 rounded-3xl mt-4 transition-all`}>
+            className={`w-full ${selectedChat?.messages?.length > 0 ? "max-w-3xl" : "max-w-2xl"} bg-[#404045] p-4 rounded-3xl mt-4 transition-all`}>
             <textarea
                 onKeyDown={handleKeyDown}
                 className="outline-none w-full resize-none overflow-hidden wrap-break-words bg-transparent"
@@ -118,7 +122,7 @@ const PromptBox = ({ setIsLoading, isLoading }) => {
 
                 <div className='flex items-center gap-2'>
                     <Image className="w-4 cursor-pointer" src={assets.pin_icon} alt="" />
-                    <button className={`${prompt ? "bg-primary" : "bg-[#71717a"} rounded-full p-2 cursor-pointer`}>
+                    <button type="submit" className={`${prompt ? "bg-primary" : "bg-[#71717a"} rounded-full p-2 cursor-pointer`}>
                         <Image className="w-auto h-auto aspect-square" src={prompt ? assets.arrow_icon : assets.arrow_icon_dull} alt="" />
                     </button>
                 </div>

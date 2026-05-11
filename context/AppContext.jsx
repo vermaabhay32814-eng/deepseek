@@ -15,7 +15,7 @@ export const AppContextProvider = ({ children }) => {
     const { getToken } = useAuth()
 
     const [chats, setChats] = useState([]);
-    const [selectedChat, setSelectedChat] = useState(null);
+    const [selectedChat, setSelectedChat] = useState({ Messages: [] });
 
     const createNewChat = async () => {
         try {
@@ -38,7 +38,7 @@ export const AppContextProvider = ({ children }) => {
 
     const fetchUsersChats = async () => {
         try {
-            const token = await getToken()
+            const token = await getToken();
 
             const { data } = await axios.get('/api/chat/get', {
                 headers: {
@@ -47,6 +47,7 @@ export const AppContextProvider = ({ children }) => {
             })
 
             if (data.success) {
+                console.log(data.data)
                 setChats(data.data)
 
                 // If the user has no chats, create one
@@ -59,17 +60,18 @@ export const AppContextProvider = ({ children }) => {
 
                     // set recently updated chat as selected chat 
 
-                    setSelectedChat(data.data[0]);
+                    setSelectedChat(data.data[0] ?? { messages: [] });
+                    console.log(data.data[0])
 
 
                 }
 
             } else {
-                toast.error(data.data)
+                toast.error(data.message)
             }
 
         } catch (error) {
-            toast.error(error.data)
+            toast.error(error.message)
         }
     }
 
