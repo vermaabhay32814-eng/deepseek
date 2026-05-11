@@ -1,20 +1,20 @@
 import mongoose from "mongoose";
 
-let cachaed = global.mongoose || {conn: null, promise: null};
+let cached = global.mongoose || { conn: null, promise: null };
 
 export default async function connectDB() {
-    if (cachaed.conn) {
-        return cachaed.conn;
+    if (cached.conn) {
+        return cached.conn;
     };
-    if (!cachaed.promise) {
-        cachaed.promise = mongoose.connect(process.env.MONGODB_URI).then((mongoose) => {
+    if (!cached.promise) {
+        cached.promise = mongoose.connect(process.env.MONGODB_URI).then((mongoose) => {
             return mongoose;
         })
         try {
-            cachaed.conn = await cachaed.promise;
+            cached.conn = await cached.promise;
         } catch (error) {
             console.error("Error connecting to MongoDB:", error);
         }
-        return cachaed.conn;
+        return cached.conn;
     }
 }

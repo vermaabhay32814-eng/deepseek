@@ -75,7 +75,6 @@ export default function Home() {
           )}
           <PromptBox isLoading={isLoading} setIsLoading={setIsLoading} />
           <p className="text-xs absolute bottom-1 text-gray-500">AI-generated, for referance only</p>
-
         </div>
       </div>
     </div>
