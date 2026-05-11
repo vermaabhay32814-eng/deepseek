@@ -20,7 +20,7 @@ export async function POST(req) {
 
         await connectDB();
 
-        await Chat.findOneAndUpdate({ _id: checkId, userId }, { name });
+        await Chat.findOneAndUpdate({ _id: chatId, userId }, { name });
 
         return NextResponse.json({ success: true, message: "Chat Renamed" });
 
