@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme{
+@theme {
   --color-primary: #4d6bfe;
 }
 
@@ -10,4 +10,20 @@ html {
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.loader div:nth-child(2) {
+  animation-delay: o.2s;
+}
+
+.loader div:nth-child(2) {
+  animation-delay: o.4s;
+}
+
+code {
+  white-space: pre-wrap !important;
+}
+
+pre {
+  border-radius: 10px !important;
 }
