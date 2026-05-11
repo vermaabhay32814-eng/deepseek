@@ -35,7 +35,7 @@ export async function POST(req) {
         const userPrompt = {
             role: "user",
             content: prompt,
-            timestamp: DataTransfer.now()
+            timestamp: Date.now()
         };
 
         data.messages.push(userPrompt);
@@ -49,7 +49,7 @@ export async function POST(req) {
         });
 
         const message = completion.choices[0].message;
-        message.timestamp = DataTransfer.now()
+        message.timestamp = Date.now()
         data.messages.push(message);
         data.save();
 
